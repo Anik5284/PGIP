@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --primary: #1e40af;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --border: #e2e8f0;
+  --card: #ffffff;
+  --muted: #f1f5f9;
 }
 
 @theme inline {
@@ -22,5 +28,33 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Geist Sans", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+/* Government website styling patterns */
+.gov-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.gov-button {
+  background: var(--primary);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.gov-button:hover {
+  background: var(--primary-dark);
+}
+
+.gov-input {
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.gov-input:focus {
+  outline: none;
+  ring: 2px solid var(--primary);
+  border-color: var(--primary);
 }

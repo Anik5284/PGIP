@@ -1,108 +1,242 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { FileText, MessageSquare, Upload, User, LogOut, AlertTriangle, CheckSquare } from "lucide-react"
-import {Button} from "../components/ui/button"
-import { Card, CardContent } from "../components/ui/card"
-
-
+import { useState } from "react";
+import {
+  FileText,
+  MessageSquare,
+  Upload,
+  User,
+  LogOut,
+  AlertTriangle,
+  CheckSquare,
+  Shield,
+  Bell,
+  Menu,
+  X,
+} from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
 
 export default function GovernmentPortal() {
-  const [selectedTab, setSelectedTab] = useState("welcome")
+  const [selectedTab, setSelectedTab] = useState("welcome");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
-      {/* Header Navigation */}
-      <header className="bg-white/50 backdrop-blur-sm shadow-lg rounded-b-3xl mx-4 mt-4">
-        <nav className="flex flex-wrap items-center justify-between p-4 md:px-8">
-          <div className="flex flex-wrap items-center gap-2 md:gap-8 text-sm md:text-base font-medium">
-            <button
-              onClick={() => setSelectedTab("welcome")}
-              className={`px-3 py-2 rounded-lg transition-colors ${
-                selectedTab === "welcome" ? "bg-purple-100 text-purple-700" : "text-gray-700 hover:text-purple-600"
-              }`}
-            >
-              Welcome To Personalized Government Info Portal
-            </button>
-            <span className="hidden md:inline text-gray-400">|</span>
-            <button
-              onClick={() => setSelectedTab("schemes")}
-              className={`px-3 py-2 rounded-lg transition-colors ${
-                selectedTab === "schemes" ? "bg-purple-100 text-purple-700" : "text-gray-700 hover:text-purple-600"
-              }`}
-            >
-              Schemes
-            </button>
-            <span className="hidden md:inline text-gray-400">|</span>
-            <button
-              onClick={() => setSelectedTab("exams")}
-              className={`px-3 py-2 rounded-lg transition-colors ${
-                selectedTab === "exams" ? "bg-purple-100 text-purple-700" : "text-gray-700 hover:text-purple-600"
-              }`}
-            >
-              Exams
-            </button>
-            <span className="hidden md:inline text-gray-400">|</span>
-            <button
-              onClick={() => setSelectedTab("notifications")}
-              className={`px-3 py-2 rounded-lg transition-colors ${
-                selectedTab === "notifications"
-                  ? "bg-purple-100 text-purple-700"
-                  : "text-gray-700 hover:text-purple-600"
-              }`}
-            >
-              Notifications
-            </button>
-          </div>
-        </nav>
-      </header>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Main Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-            Personalized Government Info Portal
-          </h1>
-        </div>
-
-        {/* Announcement Banner */}
-          <div className="bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl p-4 mb-8 shadow-xl">
-            <div className="overflow-hidden">
-              <div className="whitespace-nowrap animate-marquee">
-                <p className="text-white font-semibold text-lg inline-block">
-                  📢 Announcement: Moving Text - Text passing Right to Left
+    <div className="min-h-screen bg-gray-50">
+      {/* Government Header */}
+      <header className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="bg-blue-600 text-white rounded-lg p-2">
+                <Shield className="h-6 w-6" />
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">
+                  Government Information Portal
+                </h1>
+                <p className="text-sm text-gray-600">
+                  Secure • Reliable • Official
                 </p>
               </div>
             </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <button
+                onClick={() => setSelectedTab("welcome")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  selectedTab === "welcome"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                }`}
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={() => setSelectedTab("schemes")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  selectedTab === "schemes"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                }`}
+              >
+                Schemes
+              </button>
+              <button
+                onClick={() => setSelectedTab("exams")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  selectedTab === "exams"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                }`}
+              >
+                Exams
+              </button>
+              <button
+                onClick={() => setSelectedTab("notifications")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  selectedTab === "notifications"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                }`}
+              >
+                Notifications
+              </button>
+            </nav>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </Button>
+            </div>
           </div>
 
+          {/* Mobile Navigation */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-gray-200 py-2">
+              <nav className="flex flex-col space-y-1">
+                <button
+                  onClick={() => {
+                    setSelectedTab("welcome");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    selectedTab === "welcome"
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                  }`}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedTab("schemes");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    selectedTab === "schemes"
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                  }`}
+                >
+                  Schemes
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedTab("exams");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    selectedTab === "exams"
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                  }`}
+                >
+                  Exams
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedTab("notifications");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    selectedTab === "notifications"
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-100"
+                  }`}
+                >
+                  Notifications
+                </button>
+              </nav>
+            </div>
+          )}
+        </div>
+      </header>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome to Your Government Portal
+          </h1>
+          <p className="text-gray-600">
+            Access personalized government services and information
+          </p>
+        </div>
+
+        {/* Announcement Banner */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+          <div className="flex items-start space-x-3">
+            <Bell className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-blue-800 font-medium mb-1">
+                Important Announcement
+              </p>
+              <p className="text-blue-700 text-sm">
+                New digital services are now available. Check the latest updates
+                and apply for eligible schemes.
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-8">
-            {/* Highlights of Services */}
+            {/* Government Services */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-6 drop-shadow-lg">Highlights of Services</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Government Services
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="bg-gradient-to-br from-green-400 to-emerald-500 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <Card className="gov-card hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6 text-center">
-                    <FileText className="w-12 h-12 text-white mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">Schemes</h3>
+                    <div className="bg-blue-100 text-blue-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <FileText className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Government Schemes
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      Browse and apply for government schemes
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-blue-400 to-indigo-500 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <Card className="gov-card hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6 text-center">
-                    <FileText className="w-12 h-12 text-white mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">Exams</h3>
+                    <div className="bg-green-100 text-green-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                      <CheckSquare className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Competitive Exams
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      Register for government exams
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-purple-400 to-pink-500 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <Card className="gov-card hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6 text-center">
-                    <FileText className="w-12 h-12 text-white mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">Digital Locker</h3>
+                    <div className="bg-purple-100 text-purple-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                      <FileText className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Digital Locker
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      Secure document storage
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -110,26 +244,49 @@ export default function GovernmentPortal() {
 
             {/* Key Features */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-6 drop-shadow-lg">Key Features</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Key Features
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="bg-gradient-to-br from-red-400 to-rose-500 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <Card className="gov-card hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6 text-center">
-                    <AlertTriangle className="w-12 h-12 text-white mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">Alerts</h3>
+                    <div className="bg-red-100 text-red-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                      <AlertTriangle className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Important Alerts
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      Stay updated with important notifications
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-yellow-400 to-orange-500 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <Card className="gov-card hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6 text-center">
-                    <CheckSquare className="w-12 h-12 text-white mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">Documents Checklist</h3>
+                    <div className="bg-yellow-100 text-yellow-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-yellow-600 group-hover:text-white transition-colors">
+                      <CheckSquare className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Document Checklist
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      Required documents for services
+                    </p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-teal-400 to-cyan-500 border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <Card className="gov-card hover:shadow-lg transition-all duration-300 cursor-pointer group">
                   <CardContent className="p-6 text-center">
-                    <MessageSquare className="w-12 h-12 text-white mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">FeedBack</h3>
+                    <div className="bg-teal-100 text-teal-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                      <MessageSquare className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Feedback
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      Share your experience with us
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -138,54 +295,82 @@ export default function GovernmentPortal() {
 
           {/* User Profile Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl sticky top-8">
+            <Card className="gov-card sticky top-8">
               <CardContent className="p-6">
-                {/* Upload Photo */}
-                <div className="text-center mb-6">
-                  <div className="relative inline-block">
-                    <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                {/* Profile Section */}
+                <div className="flex flex-col items-center mb-8">
+                  <div className="relative mb-4">
+                    <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center border-4 border-white shadow-md">
                       <User className="w-10 h-10 text-gray-600" />
                     </div>
-                    <Button
-                      size="sm"
-                      className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-                    >
+                    <Button className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0 bg-blue-600 hover:bg-blue-700 text-white shadow-md flex items-center justify-center">
                       <Upload className="w-4 h-4" />
                     </Button>
                   </div>
-                  <p className="text-sm font-medium text-gray-700">Upload Photo</p>
+                  <p className="text-sm font-medium text-gray-700">
+                    Upload Photo
+                  </p>
                 </div>
 
-                {/* User Details */}
-              <div className="space-y-3 text-sm">
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-2 rounded-md">
-                  <label className="block text-xs font-medium text-gray-700 mb-0.5">Name:</label>
-                     <input
-                         type="text"
-                        className="w-full bg-transparent border-0 focus:outline-none text-gray-800 text-sm py-1"
-                        placeholder="Enter your name"
-                       />
+                {/* User Details Form */}
+                <div className="space-y-5">
+                  <div>
+                    <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                      <User className="w-4 h-4 mr-2 text-gray-500" />
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      className="gov-input w-full px-3 py-2.5 text-sm rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      placeholder="Enter your name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                      <MessageSquare className="w-4 h-4 mr-2 text-gray-500" />
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      className="gov-input w-full px-3 py-2.5 text-sm rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      placeholder="Enter your email"
+                    />
+                  </div>
                 </div>
 
-                  <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-2 rounded-md">
-                    <label className="block text-xs font-medium text-gray-700 mb-0.5">Email:</label>
-                      <input
-                          type="email"
-                              className="w-full bg-transparent border-0 focus:outline-none text-gray-800 text-sm py-1"
-                             placeholder="Enter your email"
-                      />
-                 </div>
-                </div>
                 {/* Logout Button */}
-                <Button className="w-full mt-6 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-all duration-300">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </Button>
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <Button className="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md transition-colors">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <p>© 2024 Government Information Portal. All rights reserved.</p>
+            <div className="flex space-x-4">
+              <a href="/privacy" className="hover:text-gray-900">
+                Privacy Policy
+              </a>
+              <a href="/terms" className="hover:text-gray-900">
+                Terms of Service
+              </a>
+              <a href="/help" className="hover:text-gray-900">
+                Help
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
