@@ -194,9 +194,7 @@ export default function GovernmentPortal() {
                   {tab[0].toUpperCase() + tab.slice(1)}
                 </button>
               ))}
-              <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
-                <Bell className="w-5 h-5" />
-              </Button>
+              {/* Bell icon removed from here */}
               <Button variant="ghost" className="text-red-600 hover:bg-red-50">
                 <LogOut className="w-5 h-5 mr-1" /> Logout
               </Button>
