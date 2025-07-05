@@ -10,7 +10,7 @@ export default function ApplyPage() {
     dob: "",
     place: "",
     qualification: "",
-    state: "", // changed from country
+    state: "",
     religion: "",
     tenthMarks: "",
     twelfthMarks: "",
@@ -24,13 +24,11 @@ export default function ApplyPage() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
@@ -84,7 +82,7 @@ export default function ApplyPage() {
               <input
                 type={field.type || "text"}
                 name={field.name}
-                value={formData[field.name as keyof typeof formData]}
+                value={formData[field.name]}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none transition duration-300"
@@ -127,7 +125,6 @@ export default function ApplyPage() {
             </select>
           </div>
 
-          {/* Replaced Country with State */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">State</label>
             <select
