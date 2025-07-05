@@ -28,11 +28,14 @@ export default function ApplyPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-  };
+const handleSubmit = (e) => {
+  e.preventDefault();
+  setSubmitted(true);
+  setTimeout(() => {
+    setSubmitted(false);
+    window.location.href = '/login'; // Redirects after 3 seconds
+  }, 3000);
+};
 
   const states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
