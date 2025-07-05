@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3018 --turbopack",
+    "dev": "next dev -p 3022 --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -15,7 +15,7 @@
     "lucide-react": "^0.522.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.14.3",
-    "next": "15.3.2",
+    "next": "^15.3.5",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

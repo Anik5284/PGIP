@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -59,7 +60,7 @@ export default function Register() {
         e.target.reset();
         setSuccess("Registration successful! Redirecting...");
         setTimeout(() => {
-          router.push("/");
+          router.push("/apply");
         }, 1500);
       } else {
         setError("Registration failed. Please try again.");

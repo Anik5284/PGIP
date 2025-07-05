@@ -10,7 +10,7 @@ export default function ApplyPage() {
     dob: "",
     place: "",
     qualification: "",
-    country: "",
+    state: "", // changed from country
     religion: "",
     tenthMarks: "",
     twelfthMarks: "",
@@ -24,7 +24,9 @@ export default function ApplyPage() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -34,12 +36,18 @@ export default function ApplyPage() {
     setTimeout(() => setSubmitted(false), 3000);
   };
 
-  const countries = [
-    "India", "United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "Japan", "China", "Brazil", "Others"
+  const states = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya",
+    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim",
+    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand",
+    "West Bengal"
   ];
 
   const religions = [
-    "Hinduism", "Islam", "Christianity", "Sikhism", "Buddhism", "Jainism", "Judaism", "Atheist", "Others"
+    "Hinduism", "Islam", "Christianity", "Sikhism", "Buddhism", "Jainism",
+    "Judaism", "Atheist", "Others"
   ];
 
   return (
@@ -119,19 +127,20 @@ export default function ApplyPage() {
             </select>
           </div>
 
+          {/* Replaced Country with State */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Country</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">State</label>
             <select
-              name="country"
-              value={formData.country}
+              name="state"
+              value={formData.state}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none transition duration-300"
             >
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>
-                  {country}
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state} value={state}>
+                  {state}
                 </option>
               ))}
             </select>
