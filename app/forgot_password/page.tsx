@@ -15,9 +15,6 @@ export default function ForgotPasswordPage() {
     setError('')
 
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
       const res = await fetch('/api/forget-password', {
         method: 'POST',
         headers: {
@@ -26,8 +23,10 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ email }),
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        throw new Error('Failed to send reset link')
+        throw new Error(data.message || 'Failed to send reset link')
       }
 
       setSent(true)
@@ -56,6 +55,7 @@ export default function ForgotPasswordPage() {
                 <input
                   id="email"
                   type="email"
+                  autoComplete="email"
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your email"
                   value={email}
@@ -89,12 +89,7 @@ export default function ForgotPasswordPage() {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <h1 className="text-2xl font-bold">Check your email</h1>
