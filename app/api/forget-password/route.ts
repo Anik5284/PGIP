@@ -4,50 +4,48 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 
-export const POST = async (request: any) => {
+export const POST = async (request: Request) => {
   try {
     const { email } = await request.json();
 
-    await connectMongoDB(); // ✅ Use correct connect function name (was just `connect()`)
+    await connectMongoDB();
 
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      return new NextResponse("Email doesn't exist.", { status: 400 });
+      return NextResponse.json({ message: "Email doesn't exist." }, { status: 400 });
     }
 
-    // ✅ Generate token & expiry
+    // Generate token & expiry
     const resetToken = crypto.randomBytes(20).toString("hex");
-    const passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-    const passwordResetExpires = Date.now() + 3600000; // 1 hour
+    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    const tokenExpiry = Date.now() + 1000 * 60 * 60; // 1 hour
 
-    // ✅ Assign values to user
-    existingUser.resetToken = passwordResetToken;
-    existingUser.resetTokenExpiry = passwordResetExpires;
-    await existingUser.save(); // ✅ Save the updated user in DB
+    // Save hashed token & expiry to user
+    existingUser.resetToken = hashedToken;
+    existingUser.resetTokenExpiry = tokenExpiry;
+    await existingUser.save();
 
     const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const emailBody = `Reset your password using the following link: ${resetUrl}`;
 
-    const body = `Reset your password by clicking the following URL: ${resetUrl}`;
+    sgMail.setApiKey(process.env.SENDING_API_key || "");
 
     const msg = {
       to: email,
       from: "anikb5016@gmail.com",
-      subject: "Reset Password",
-      text: body,
+      subject: "Reset Your Password",
+      text: emailBody,
     };
-
-    sgMail.setApiKey(process.env.SENDING_API_key || "");
 
     await sgMail.send(msg);
 
-    return new NextResponse("Reset password email is sent.", { status: 200 });
+    return NextResponse.json({ message: "Reset password email sent." }, { status: 200 });
   } catch (error: any) {
-    // Optional: cleanup in case of failure
-    console.error("Error in password reset:", error);
-
-    return new NextResponse("Failed to process request. Please try again.", {
-      status: 500,
-    });
+    console.error("Error sending reset email:", error);
+    return NextResponse.json(
+      { message: "Failed to send reset email. Please try again." },
+      { status: 500 }
+    );
   }
 };

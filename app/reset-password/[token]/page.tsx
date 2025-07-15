@@ -1,39 +1,59 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
 
-export default function ResetPasswordPage() {
+export default function ResetPassword({ params }: { params: { token: string } }) {
+  const router = useRouter()
+  const [validToken, setValidToken] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-  const [loading, setLoading] = useState(false)
 
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token') // or use dynamic route param
+  // ✅ Token verification
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const res = await fetch('/api/verifytoken', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: params.token }),
+        })
 
-  const router = useRouter()
+        const data = await res.json()
 
+        if (!res.ok) {
+          throw new Error(data.message || 'Invalid token')
+        }
+
+        setValidToken(true)
+      } catch (err: any) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    verifyToken()
+  }, [params.token])
+
+  // ✅ Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    setLoading(true)
 
     if (password !== confirmPassword) {
       setError('Passwords do not match')
-      setLoading(false)
       return
     }
 
     try {
       const res = await fetch('/api/reset-password', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: params.token, password }),
       })
 
       const data = await res.json()
@@ -46,9 +66,16 @@ export default function ResetPasswordPage() {
       setTimeout(() => router.push('/login'), 3000)
     } catch (err: any) {
       setError(err.message || 'An error occurred')
-    } finally {
-      setLoading(false)
     }
+  }
+
+  // ✅ UI rendering
+  if (loading) {
+    return <div className="text-center mt-20 text-gray-600">Verifying token...</div>
+  }
+
+  if (!validToken) {
+    return <div className="text-center mt-20 text-red-500">{error || 'Invalid or expired token.'}</div>
   }
 
   return (
@@ -92,10 +119,9 @@ export default function ResetPasswordPage() {
               {error && <p className="text-sm text-red-500">{error}</p>}
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-                disabled={loading}
+                className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
               >
-                {loading ? 'Resetting...' : 'Reset Password'}
+                Reset Password
               </button>
             </form>
           </>
