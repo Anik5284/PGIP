@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Shield, FileText } from "lucide-react";
 import toast from "react-hot-toast";
 
-
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -24,18 +24,21 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, isAdmin }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        
         localStorage.setItem("token", data.token);
 
         toast.success("Signed in successfully!");
-        router.push("/dashboard");
 
+        if (data.role === "admin") {
+          router.push("/admin-portal");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
         setError(data.message || "Invalid credentials");
       }
@@ -123,14 +126,25 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <label className="flex items-center text-sm">
                   <input
                     type="checkbox"
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-600 focus:ring-2"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Remember me</span>
+                  <span className="ml-2 text-gray-700">Remember me</span>
                 </label>
+
+                <label className="flex items-center text-sm">
+                  <input
+                    type="checkbox"
+                    checked={isAdmin}
+                    onChange={(e) => setIsAdmin(e.target.checked)}
+                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-600 focus:ring-2"
+                  />
+                  <span className="ml-2 text-gray-700">Login as Admin</span>
+                </label>
+
                 <Link href="/forgot_password" className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
                   Forgot password?
                 </Link>
