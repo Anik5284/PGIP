@@ -24,18 +24,36 @@ export default function ApplyPage() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  setSubmitted(true);
-  setTimeout(() => {
-    setSubmitted(false);
-    window.location.href = '/login'; // Redirects after 3 seconds
-  }, 3000);
-};
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit application");
+      }
+
+      setSubmitted(true);
+
+      setTimeout(() => {
+        setSubmitted(false);
+        window.location.href = "/login";
+      }, 3000);
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Something went wrong while submitting the form.");
+    }
+  };
 
   const states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -65,7 +83,7 @@ const handleSubmit = (e) => {
         )}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[
+          {[ 
             { label: "Full Name", name: "name" },
             { label: "Father's Name", name: "fatherName" },
             { label: "Mother's Name", name: "motherName" },
