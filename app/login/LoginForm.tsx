@@ -189,7 +189,7 @@ export default function LoginPage() {
       <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <p>© 2024 Government Information Portal. All rights reserved.</p>
+            <p>© 2025 Government Information Portal. All rights reserved.</p>
             <div className="flex space-x-4">
               <Link href="/privacy" className="hover:text-gray-900">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-gray-900">Terms of Service</Link>

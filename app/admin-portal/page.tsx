@@ -1,4 +1,4 @@
-"use client"; // Add this line if using App Router in Next.js 13+
+"use client"; 
 
 import { useRouter } from "next/navigation";
 
