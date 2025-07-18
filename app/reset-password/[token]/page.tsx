@@ -1,81 +1,74 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { use } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function ResetPassword({ params }: { params: { token: string } }) {
-  const router = useRouter()
-  const [validToken, setValidToken] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [success, setSuccess] = useState(false)
+export default function ResetPassword({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = use(params); // ✅ unwrap params safely
 
-  // ✅ Token verification
+  const router = useRouter();
+  const [validToken, setValidToken] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     const verifyToken = async () => {
       try {
         const res = await fetch('/api/verifytoken', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: params.token }),
-        })
+          body: JSON.stringify({ token }),
+        });
 
-        const data = await res.json()
-
-        if (!res.ok) {
-          throw new Error(data.message || 'Invalid token')
-        }
-
-        setValidToken(true)
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Invalid token');
+        setValidToken(true);
       } catch (err: any) {
-        setError(err.message)
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    verifyToken()
-  }, [params.token])
+    verifyToken();
+  }, [token]);
 
-  // ✅ Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      return
+      setError('Passwords do not match');
+      return;
     }
 
     try {
       const res = await fetch('/api/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: params.token, password }),
-      })
+        body: JSON.stringify({ token, password }),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Reset failed');
 
-      if (!res.ok) {
-        throw new Error(data.message || 'Reset failed')
-      }
-
-      setSuccess(true)
-      setTimeout(() => router.push('/login'), 3000)
+      setSuccess(true);
+      setTimeout(() => router.push('/login'), 3000);
     } catch (err: any) {
-      setError(err.message || 'An error occurred')
+      setError(err.message || 'An error occurred');
     }
-  }
+  };
 
-  // ✅ UI rendering
   if (loading) {
-    return <div className="text-center mt-20 text-gray-600">Verifying token...</div>
+    return <div className="text-center mt-20 text-gray-600">Verifying token...</div>;
   }
 
   if (!validToken) {
-    return <div className="text-center mt-20 text-red-500">{error || 'Invalid or expired token.'}</div>
+    return <div className="text-center mt-20 text-red-500">{error || 'Invalid or expired token.'}</div>;
   }
 
   return (
@@ -128,5 +121,5 @@ export default function ResetPassword({ params }: { params: { token: string } })
         )}
       </div>
     </div>
-  )
+  );
 }

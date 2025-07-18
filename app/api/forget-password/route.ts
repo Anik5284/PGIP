@@ -3,7 +3,7 @@ import User from "@/models/user";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
-import { headers } from 'next/headers';
+import { headers } from "next/headers";
 
 export const POST = async (request: Request) => {
   try {
@@ -26,9 +26,9 @@ export const POST = async (request: Request) => {
     await existingUser.save();
 
     // Create reset URL
-    const headersList = headers();
-    const protocol = headersList.get('x-forwarded-proto') || 'http';
-    const host = headersList.get('host');
+    const headersList = await headers(); // FIXED: await headers()
+    const protocol = headersList.get("x-forwarded-proto") || "http";
+    const host = headersList.get("host");
     const baseUrl = `${protocol}://${host}`;
     const resetUrl = `${baseUrl}/reset-password/${resetToken}`;
     const emailBody = `Reset your password here: ${resetUrl}`;
