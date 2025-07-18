@@ -20,24 +20,24 @@ export const POST = async (request: Request) => {
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
     const tokenExpiry = Date.now() + 1000 * 60 * 60; // 1 hour
 
-    // Save to DB
+    // Save token to user
     existingUser.resetToken = hashedToken;
     existingUser.resetTokenExpiry = tokenExpiry;
     await existingUser.save();
 
-    // Create reset URL
-    const headersList = await headers(); // FIXED: await headers()
+    // ✅ Correct use of async headers()
+    const headersList = await headers();
     const protocol = headersList.get("x-forwarded-proto") || "http";
     const host = headersList.get("host");
     const baseUrl = `${protocol}://${host}`;
     const resetUrl = `${baseUrl}/reset-password/${resetToken}`;
     const emailBody = `Reset your password here: ${resetUrl}`;
 
-    // Send Email
+    // Send email using SendGrid
     sgMail.setApiKey(process.env.SENDING_API_key || "");
     const msg = {
       to: email,
-      from: "anikb5016@gmail.com",
+      from: "anikb5016@gmail.com", // Consider using a verified sender
       subject: "Reset Your Password",
       text: emailBody,
     };
@@ -46,7 +46,7 @@ export const POST = async (request: Request) => {
 
     return NextResponse.json({ message: "Reset email sent." }, { status: 200 });
   } catch (error: any) {
-    console.error("Error sending email:", error);
+    console.error("Error in /api/forget-password:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 };
