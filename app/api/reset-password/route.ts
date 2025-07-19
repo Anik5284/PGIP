@@ -1,6 +1,5 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
-import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
@@ -20,12 +19,13 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ message: "Token is invalid or expired" }, { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user.password = hashedPassword;
+    // ✅ Don't manually hash here — Mongoose will do it
+    user.password = password;
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
 
     await user.save();
+
     return NextResponse.json({ message: "Password reset successful" }, { status: 200 });
   } catch (err) {
     console.error("Reset error:", err);

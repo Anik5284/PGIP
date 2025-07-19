@@ -1,47 +1,37 @@
-import { MongoClient } from "mongodb";
+import { connectMongoDB } from "@/lib/mongodb";
+import User from "@/models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
-const uri = process.env.MONGODB_URI;
 const jwtSecret = process.env.JWT_SECRET;
 
-// Hardcoded admin credentials
+if (!jwtSecret) {
+  throw new Error("JWT_SECRET is not defined in environment variables.");
+}
+
 const ADMIN_EMAIL = "admin@example.com";
-const ADMIN_PASSWORD = "admin123"; // You can hash this if preferred
+const ADMIN_PASSWORD = "admin123";
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { email, password, isAdmin } = body;
+    const { email, password, isAdmin } = await request.json();
+    await connectMongoDB();
 
     if (!email || !password) {
       return NextResponse.json({ message: "Missing email or password" }, { status: 400 });
     }
 
-    // 🔒 Handle Admin Login
     if (isAdmin) {
       if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
         const token = jwt.sign({ email, role: "admin" }, jwtSecret, { expiresIn: "1d" });
-
-        return NextResponse.json({
-          token,
-          role: "admin",
-        }, { status: 200 });
+        return NextResponse.json({ token, role: "admin" }, { status: 200 });
       } else {
         return NextResponse.json({ message: "Invalid admin credentials" }, { status: 401 });
       }
     }
 
-    // 👤 Handle Normal User Login
-    const client = await MongoClient.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    const db = client.db();
-    const user = await db.collection("users").findOne({ email });
-
+    const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
     }
