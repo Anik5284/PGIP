@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
