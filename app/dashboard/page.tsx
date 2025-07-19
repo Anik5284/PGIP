@@ -1,6 +1,7 @@
 "use client";
-
+import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   FileText,
   MessageSquare,
@@ -21,6 +22,7 @@ import { Card, CardContent } from "../components/ui/card";
 export default function GovernmentPortal() {
   const [selectedTab, setSelectedTab] = useState("welcome");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   const renderContent = () => {
     switch (selectedTab) {
@@ -86,75 +88,91 @@ export default function GovernmentPortal() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-              <Card className="hover:shadow-lg group transition">
-                <CardContent className="p-6 text-center">
-                  <div className="bg-blue-100 text-blue-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-blue-600 group-hover:text-white">
-                    <FileText className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Government Schemes</h3>
-                  <p className="text-gray-600 text-sm">
-                    Browse and apply for schemes
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg group transition">
-                <CardContent className="p-6 text-center">
-                  <div className="bg-green-100 text-green-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-green-600 group-hover:text-white">
-                    <CheckSquare className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Competitive Exams</h3>
-                  <p className="text-gray-600 text-sm">
-                    Register for government exams
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg group transition">
-                <CardContent className="p-6 text-center">
-                  <div className="bg-purple-100 text-purple-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-purple-600 group-hover:text-white">
-                    <FileText className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Digital Locker</h3>
-                  <p className="text-gray-600 text-sm">
-                    Secure document storage
-                  </p>
-                </CardContent>
-              </Card>
+              <Link href="/schemes" className="block h-full">
+                <Card className="hover:shadow-lg group transition cursor-pointer h-full">
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                    <div className="bg-blue-100 text-blue-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-blue-600 group-hover:text-white">
+                      <FileText className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Government Schemes</h3>
+                    <p className="text-gray-600 text-sm">
+                      Browse and apply for schemes
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/exams" className="block h-full">
+                <Card className="hover:shadow-lg group transition cursor-pointer h-full">
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                    <div className="bg-green-100 text-green-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-green-600 group-hover:text-white">
+                      <CheckSquare className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Competitive Exams</h3>
+                    <p className="text-gray-600 text-sm">
+                      Register for government exams
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/locker" className="block h-full">
+                <Card className="hover:shadow-lg group transition cursor-pointer h-full">
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                    <div className="bg-purple-100 text-purple-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-purple-600 group-hover:text-white">
+                      <FileText className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Digital Locker</h3>
+                    <p className="text-gray-600 text-sm">
+                      Secure document storage
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="hover:shadow-lg group transition">
-                <CardContent className="p-6 text-center">
-                  <div className="bg-red-100 text-red-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-red-600 group-hover:text-white">
-                    <Bell className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Important Alerts</h3>
-                  <p className="text-gray-600 text-sm">
-                    Stay updated with important notifications
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg group transition">
-                <CardContent className="p-6 text-center">
-                  <div className="bg-yellow-100 text-yellow-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-yellow-600 group-hover:text-white">
-                    <CheckSquare className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Document Checklist</h3>
-                  <p className="text-gray-600 text-sm">
-                    Required documents for services
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg group transition">
-                <CardContent className="p-6 text-center">
-                  <div className="bg-teal-100 text-teal-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-teal-600 group-hover:text-white">
-                    <MessageSquare className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Feedback</h3>
-                  <p className="text-gray-600 text-sm">
-                    Share your experience with us
-                  </p>
-                </CardContent>
-              </Card>
+              <Link href="/alerts" className="block h-full">
+                <Card className="hover:shadow-lg group transition cursor-pointer h-full">
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                    <div className="bg-red-100 text-red-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-red-600 group-hover:text-white">
+                      <Bell className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Important Alerts</h3>
+                    <p className="text-gray-600 text-sm">
+                      Stay updated with important notifications
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/checklist" className="block h-full">
+                <Card className="hover:shadow-lg group transition cursor-pointer h-full">
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                    <div className="bg-yellow-100 text-yellow-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-yellow-600 group-hover:text-white">
+                      <CheckSquare className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Document Checklist</h3>
+                    <p className="text-gray-600 text-sm">
+                      Required documents for services
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/feedback" className="block h-full">
+                <Card className="hover:shadow-lg group transition cursor-pointer h-full">
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                    <div className="bg-teal-100 text-teal-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-teal-600 group-hover:text-white">
+                      <MessageSquare className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Feedback</h3>
+                    <p className="text-gray-600 text-sm">
+                      Share your experience with us
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
           </>
         );
@@ -194,8 +212,11 @@ export default function GovernmentPortal() {
                   {tab[0].toUpperCase() + tab.slice(1)}
                 </button>
               ))}
-              {/* Bell icon removed from here */}
-              <Button variant="ghost" className="text-red-600 hover:bg-red-50">
+              <Button
+                variant="ghost"
+                className="text-red-600 hover:bg-red-50"
+                onClick={() => router.push("/login")}
+              >
                 <LogOut className="w-5 h-5 mr-1" /> Logout
               </Button>
             </nav>
@@ -231,6 +252,10 @@ export default function GovernmentPortal() {
               <Button
                 variant="ghost"
                 className="text-red-600 hover:bg-red-50 w-full justify-start"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  router.push("/login");
+                }}
               >
                 <LogOut className="w-5 h-5 mr-1" /> Logout
               </Button>
@@ -245,7 +270,7 @@ export default function GovernmentPortal() {
 
       <footer className="bg-white border-t border-gray-200 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-gray-600 flex justify-between items-center">
-          <p>© 2024 Government Information Portal. All rights reserved.</p>
+          <p>© 2025 Government Information Portal. All rights reserved.</p>
           <div className="flex space-x-4">
             <a href="/privacy" className="hover:text-gray-900">
               Privacy Policy
