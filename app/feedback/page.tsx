@@ -44,7 +44,7 @@ export default function FeedbackPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold mb-6">We value your feedback</h1>
+      <h1 className="text-3xl font-bold mb-6">Feedback</h1>
 
       {submitted ? (
         <div className="bg-green-100 text-green-800 p-4 rounded-lg">
