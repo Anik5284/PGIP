@@ -1,51 +1,71 @@
-"use client"
+'use client';
 
-import { useState } from "react"
+import { useState } from 'react';
 
-export default function FeedbackPage() {
-  const [message, setMessage] = useState("")
-  const [submitted, setSubmitted] = useState(false)
+export default function FeedbackForm() {
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!message.trim()) {
+      return;
+    }
+    setStatus('sending');
 
-    console.log("User Feedback:", message)
-    setSubmitted(true)
-    setMessage("")
-  }
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setMessage(''); // Clear the textarea after successful submission
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Failed to submit feedback:', error);
+      setStatus('error');
+    }
+  };
 
   return (
-    <div className="max-w-xl mx-auto mt-12 p-6 border rounded-2xl shadow-md">
-      <h1 className="text-2xl font-semibold mb-4">We value your feedback</h1>
+    <div className="bg-slate-50 font-sans p-8 rounded-2xl shadow-lg max-w-lg mx-auto border border-slate-200/80">
+      <h2 className="text-2xl font-bold text-slate-800 mb-4">Share Your Feedback</h2>
+      <p className="text-slate-600 mb-6">We value your opinion. Let us know how we can improve.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label htmlFor="feedback" className="block text-sm font-medium">
-          Your Message
-        </label>
+      <form onSubmit={handleSubmit}>
         <textarea
-          id="feedback"
-          name="feedback"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Write your feedback here..."
-          className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          rows={5}
+          className="w-full h-32 p-4 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-300 ease-in-out"
+          placeholder="Enter your feedback here..."
           required
+          disabled={status === 'sending'}
         />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
-        >
-          Submit
-        </button>
-      </form>
-
-      {submitted && (
-        <div className="mt-4 text-green-600 font-medium">
-          ✅ Thank you for your feedback!
+        <div className="mt-6 flex items-center justify-between">
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed"
+          >
+            {status === 'sending' ? 'Sending...' : 'Submit Feedback'}
+          </button>
+          
+          {status === 'success' && (
+            <p className="text-green-600 font-medium">Thank you for your feedback!</p>
+          )}
+          {status === 'error' && (
+            <p className="text-red-600 font-medium">Something went wrong. Please try again.</p>
+          )}
         </div>
-      )}
+      </form>
     </div>
-  )
+  );
 }
