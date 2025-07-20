@@ -1,71 +1,85 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-export default function FeedbackForm() {
-  const [message, setMessage] = useState('');
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+export default function FeedbackPage() {
+  const [feedback, setFeedback] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) {
-      return;
-    }
-    setStatus('sending');
+
+    if (!feedback.trim()) return;
+
+    setLoading(true);
 
     try {
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
+      const res = await fetch("/api/feedback", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({
+          message: feedback.trim(),
+          // userId: "example-user-id" // Optional: Add this if user authentication is implemented
+        }),
       });
 
-      if (response.ok) {
-        setStatus('success');
-        setMessage(''); // Clear the textarea after successful submission
+      const data = await res.json();
+
+      if (res.ok) {
+        setSubmitted(true);
+        setFeedback("");
       } else {
-        setStatus('error');
+        alert(data.message || "Failed to submit feedback.");
       }
     } catch (error) {
-      console.error('Failed to submit feedback:', error);
-      setStatus('error');
+      console.error("❌ Error submitting feedback:", error);
+      alert("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="bg-slate-50 font-sans p-8 rounded-2xl shadow-lg max-w-lg mx-auto border border-slate-200/80">
-      <h2 className="text-2xl font-bold text-slate-800 mb-4">Share Your Feedback</h2>
-      <p className="text-slate-600 mb-6">We value your opinion. Let us know how we can improve.</p>
+    <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-3xl font-bold mb-6">We value your feedback</h1>
 
-      <form onSubmit={handleSubmit}>
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full h-32 p-4 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-300 ease-in-out"
-          placeholder="Enter your feedback here..."
-          required
-          disabled={status === 'sending'}
-        />
+      {submitted ? (
+        <div className="bg-green-100 text-green-800 p-4 rounded-lg">
+          Thank you for your feedback!
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="feedback"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Your feedback
+            </label>
+            <textarea
+              id="feedback"
+              name="feedback"
+              rows={5}
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Let us know what you think..."
+            />
+          </div>
 
-        <div className="mt-6 flex items-center justify-between">
           <button
             type="submit"
-            disabled={status === 'sending'}
-            className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 disabled:bg-slate-400 disabled:cursor-not-allowed"
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
           >
-            {status === 'sending' ? 'Sending...' : 'Submit Feedback'}
+            {loading ? "Submitting..." : "Submit Feedback"}
           </button>
-          
-          {status === 'success' && (
-            <p className="text-green-600 font-medium">Thank you for your feedback!</p>
-          )}
-          {status === 'error' && (
-            <p className="text-red-600 font-medium">Something went wrong. Please try again.</p>
-          )}
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 }

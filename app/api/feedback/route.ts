@@ -1,38 +1,37 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { NextRequest, NextResponse } from "next/server";
+import { connectMongoDB } from "@/lib/mongodb";
+import Feedback from "@/models/feedback";
 
-const feedbackFilePath = path.join(process.cwd(), 'data', 'feedbacks.json');
+// POST handler
+export async function POST(req: NextRequest) {
+  try {
+    const { userId, message } = await req.json();
 
-export async function POST(req: Request) {
-  const { message } = await req.json();
+    if (!message || message.trim() === "") {
+      return NextResponse.json(
+        { message: "Message is required" },
+        { status: 400 }
+      );
+    }
 
-  const newEntry = {
-    id: Date.now(),
-    message,
-    date: new Date().toISOString(),
-  };
+    await connectMongoDB();
+    const feedback = await Feedback.create({
+      userId,
+      message: message.trim(),
+    });
 
-  // Read existing feedback
-  let data = [];
-  if (fs.existsSync(feedbackFilePath)) {
-    const content = fs.readFileSync(feedbackFilePath, 'utf8');
-    data = JSON.parse(content);
+    return NextResponse.json(
+      {
+        message: "Feedback submitted successfully",
+        feedback,
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("❌ Error saving feedback:", error);
+    return NextResponse.json(
+      { message: "Server error", error: error.message || "Unknown error" },
+      { status: 500 }
+    );
   }
-
-  data.push(newEntry);
-
-  fs.writeFileSync(feedbackFilePath, JSON.stringify(data, null, 2));
-
-  return NextResponse.json({ success: true });
-}
-
-export async function GET() {
-  if (!fs.existsSync(feedbackFilePath)) {
-    return NextResponse.json([]);
-  }
-
-  const content = fs.readFileSync(feedbackFilePath, 'utf8');
-  const data = JSON.parse(content);
-  return NextResponse.json(data);
 }
