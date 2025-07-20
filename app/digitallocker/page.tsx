@@ -1,15 +1,13 @@
-'use client'; // This directive makes it a client component
+'use client';
 
 import React, { useState, ChangeEvent } from 'react';
 
-// Define the structure for each document type for better organization
 interface DocumentInfo {
   key: string;
   label: string;
-  accept: string; // To specify accepted file types (e.g., 'image/*', 'application/pdf')
+  accept: string;
 }
 
-// An array holding all the document types required
 const documentList: DocumentInfo[] = [
   { key: 'photo', label: 'Passport Size Photo', accept: 'image/jpeg, image/png' },
   { key: 'signature', label: 'Signature', accept: 'image/jpeg, image/png' },
@@ -24,20 +22,15 @@ const documentList: DocumentInfo[] = [
   { key: 'twelfthCertificate', label: '12th Certificate', accept: 'application/pdf' },
   { key: 'gradMarksheet', label: 'Graduation Marksheet', accept: 'application/pdf' },
   { key: 'gradCertificate', label: 'Graduation Certificate', accept: 'application/pdf' },
-  { key: 'scCertificate', label: 'SC Certificate', accept: 'application/pdf, image/*' },
-  { key: 'stCertificate', label: 'ST Certificate', accept: 'application/pdf, image/*' },
-  { key: 'obcCertificate', label: 'OBC Certificate', accept: 'application/pdf, image/*' },
+  { key: 'sc_st_obc', label: 'SC/ST/OBC Certificate', accept: 'application/pdf, image/*' },
   { key: 'disabilityCertificate', label: 'Disability Certificate', accept: 'application/pdf, image/*' },
 ];
 
-// Define the type for our state that will hold the uploaded files
 type UploadedFilesState = Record<string, File | null>;
 
 const DocumentUploadPage: React.FC = () => {
-  // State to store the files uploaded by the user
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesState>({});
 
-  // Function to handle file selection
   const handleFileChange = (key: string, event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -45,7 +38,6 @@ const DocumentUploadPage: React.FC = () => {
     }
   };
 
-  // Function to handle file download
   const handleDownload = (file: File) => {
     const url = URL.createObjectURL(file);
     const a = document.createElement('a');
@@ -54,17 +46,15 @@ const DocumentUploadPage: React.FC = () => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url); // Clean up the object URL
+    URL.revokeObjectURL(url);
   };
-  
-  // Function to remove a selected file
+
   const handleRemove = (key: string) => {
     setUploadedFiles(prev => ({ ...prev, [key]: null }));
     const input = document.getElementById(key) as HTMLInputElement;
     if (input) input.value = '';
   };
 
-  // Renders a preview for image files or the file name for other types
   const renderFilePreview = (file: File) => {
     const fileType = file.type.split('/')[0];
     if (fileType === 'image') {
@@ -95,7 +85,7 @@ const DocumentUploadPage: React.FC = () => {
             return (
               <div key={key} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
                 <h3 className="font-semibold text-gray-800">{label}</h3>
-                
+
                 {!file ? (
                   <div className="mt-4">
                     <label htmlFor={key} className="cursor-pointer rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
@@ -121,7 +111,7 @@ const DocumentUploadPage: React.FC = () => {
                           {(file.size / 1024).toFixed(2)} KB
                         </p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => handleRemove(key)}
                         className="text-red-500 hover:text-red-700 font-bold text-xl"
                         title="Remove file"
