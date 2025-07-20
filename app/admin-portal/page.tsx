@@ -9,12 +9,12 @@ export default function AdminPortal() {
     { title: "Schemes Update", color: "bg-blue-100" },
     { title: "Exam Update", color: "bg-green-100" },
     { title: "Collected Documents", color: "bg-yellow-100" },
-    { title: "Alert Update", color: "bg-red-100" },
+    { title: "Alert Update", color: "bg-red-100", path: "/admin/alert" }, // ✅ Path added
     { title: "Documents Checking", color: "bg-purple-100" },
     {
       title: "Feedback Received",
       color: "bg-pink-100",
-      path: "/admin/feedback", // <-- Add route path
+      path: "/admin/feedback",
     },
   ];
 
