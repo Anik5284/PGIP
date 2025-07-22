@@ -19,7 +19,7 @@ export default function UserAlertsPage() {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const res = await fetch(`/api/alert?userId=${userId}`, {
+        const res = await fetch(`/api/alerts?userId=${userId}`, {
           headers: { Accept: "application/json" },
         });
 

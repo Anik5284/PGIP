@@ -66,7 +66,17 @@ export default function AdminAlertsPage() {
         </button>
       </form>
 
-      {status && <p className="text-green-600 mt-4">{status}</p>}
+      {status && (
+        <p
+          className={
+            status.toLowerCase().includes("sent") || status.toLowerCase().includes("success")
+              ? "text-green-600 mt-4"
+              : "text-red-600 mt-4"
+          }
+        >
+          {status}
+        </p>
+      )}
     </div>
   );
 }

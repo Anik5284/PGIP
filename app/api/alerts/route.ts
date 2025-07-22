@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
 
+    // Improved query: only match userId if provided, otherwise fetch all
     const query = userId
       ? {
           $or: [
@@ -18,19 +19,17 @@ export async function GET(req: NextRequest) {
             { userId: "" },
           ],
         }
-      : {
-          $or: [
-            { userId: { $exists: false } },
-            { userId: null },
-            { userId: "" },
-          ],
-        };
+      : {};
+
+    console.log("Query:", JSON.stringify(query));
 
     const alerts = await AdminAlert.find(query).sort({ createdAt: -1 });
 
+    console.log("Alerts found:", alerts.length);
+
     return NextResponse.json({ alerts }, { status: 200 });
   } catch (error: any) {
-    console.error("GET /api/alert error:", error);
+    console.error("GET /api/alerts error:", error);
     return NextResponse.json(
       { message: "Failed to fetch alerts", error: error.message },
       { status: 500 }
@@ -64,7 +63,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error("POST /api/alert error:", error);
+    console.error("POST /api/alerts error:", error);
     return NextResponse.json(
       { error: "Failed to send alert", details: error.message },
       { status: 500 }

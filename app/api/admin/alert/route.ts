@@ -20,10 +20,10 @@ export async function POST(req: Request) {
       title,
       description,
       userId,
-      createdAt: new Date(), // optional if your schema uses timestamps
+      createdAt: new Date(), // Remove if your schema uses timestamps
     });
 
-    return NextResponse.json({ message: "Alert sent", alert }, { status: 200 });
+    return NextResponse.json({ message: "Alert sent", alert }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
