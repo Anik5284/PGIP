@@ -1,4 +1,3 @@
-// app/user/alerts/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,35 +12,43 @@ interface Alert {
 export default function UserAlertsPage() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Simulate userId — in real app, fetch from session
-  const userId = "123"; // replace with dynamic id if needed
+  const userId = "user123"; // TODO: Replace with dynamic user ID from session
 
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const res = await fetch(`/api/user/alerts?userId=${userId}`);
+        const res = await fetch(`/api/alert?userId=${userId}`, {
+          headers: { Accept: "application/json" },
+        });
+
         const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || "Failed to load alerts");
+
         setAlerts(data.alerts || []);
-      } catch (error) {
-        console.error("Error fetching alerts:", error);
+      } catch (err: any) {
+        console.error("Error fetching alerts:", err);
+        setError(err.message || "Unexpected error");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAlerts();
-  }, []);
+    if (userId) {
+      fetchAlerts();
+    }
+  }, [userId]);
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-4">Your Alerts</h1>
 
-      {loading ? (
-        <p>Loading alerts...</p>
-      ) : alerts.length === 0 ? (
-        <p>No alerts yet.</p>
-      ) : (
+      {loading && <p>Loading alerts...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
+      {!loading && !error && alerts.length === 0 && <p>No alerts yet.</p>}
+      {!loading && !error && alerts.length > 0 && (
         <ul className="space-y-4">
           {alerts.map((alert) => (
             <li

@@ -11,13 +11,19 @@ export default function AdminAlertsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!userId) {
+      setStatus("User ID is required.");
+      return;
+    }
+
     const res = await fetch("/api/admin/alert", {
       method: "POST",
-      body: JSON.stringify({ title, description, userId: userId || null }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description, userId }),
     });
 
     const data = await res.json();
-    setStatus(data.message || data.error);
+    setStatus(data.message || data.error || "Message sent.");
     setTitle("");
     setDescription("");
     setUserId("");
@@ -45,11 +51,13 @@ export default function AdminAlertsPage() {
         />
         <input
           type="text"
-          placeholder="User ID (optional)"
+          placeholder="User ID"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
+          required
           className="w-full border p-2 rounded"
         />
+
         <button
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -57,6 +65,7 @@ export default function AdminAlertsPage() {
           Send Alert
         </button>
       </form>
+
       {status && <p className="text-green-600 mt-4">{status}</p>}
     </div>
   );
