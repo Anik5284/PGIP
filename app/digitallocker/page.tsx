@@ -70,15 +70,34 @@ const DocumentUploadPage: React.FC = () => {
   };
 
   // Handler for "Upload All" button
-  const handleUploadAll = () => {
+  const handleUploadAll = async () => {
     const filesToUpload = Object.entries(uploadedFiles).filter(([_, file]) => file);
     if (filesToUpload.length === 0) {
       alert("Please upload at least one document before submitting.");
       return;
     }
-    // For demonstration, just log the files. Replace this with your upload logic.
-    console.log("Files to upload:", filesToUpload);
-    alert(`You have selected ${filesToUpload.length} document(s) for upload.`);
+
+    const formData = new FormData();
+    // TODO: Replace with actual user ID from session/auth
+    formData.append("userId", "user123");
+    filesToUpload.forEach(([key, file]) => {
+      if (file) formData.append(key, file);
+    });
+
+    try {
+      const res = await fetch("/api/digitallocker", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("Documents uploaded successfully!");
+      } else {
+        alert("Upload failed: " + data.error);
+      }
+    } catch (err) {
+      alert("An error occurred during upload.");
+    }
   };
 
   return (
