@@ -69,6 +69,18 @@ const DocumentUploadPage: React.FC = () => {
     return <p className="mt-2 text-sm text-gray-500">{file.name}</p>;
   };
 
+  // Handler for "Upload All" button
+  const handleUploadAll = () => {
+    const filesToUpload = Object.entries(uploadedFiles).filter(([_, file]) => file);
+    if (filesToUpload.length === 0) {
+      alert("Please upload at least one document before submitting.");
+      return;
+    }
+    // For demonstration, just log the files. Replace this with your upload logic.
+    console.log("Files to upload:", filesToUpload);
+    alert(`You have selected ${filesToUpload.length} document(s) for upload.`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-5xl">
@@ -133,6 +145,16 @@ const DocumentUploadPage: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Upload All Button */}
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={handleUploadAll}
+            className="rounded-md bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500"
+          >
+            Upload All
+          </button>
         </div>
       </div>
     </div>

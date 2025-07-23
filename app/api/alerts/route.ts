@@ -9,23 +9,14 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
 
-    // Improved query: only match userId if provided, otherwise fetch all
-    const query = userId
-      ? {
-          $or: [
-            { userId },
-            { userId: { $exists: false } },
-            { userId: null },
-            { userId: "" },
-          ],
-        }
-      : {};
 
-    console.log("Query:", JSON.stringify(query));
+    const query = userId ? { userId } : {};
+
+    console.log("GET /api/alerts Query:", JSON.stringify(query));
 
     const alerts = await AdminAlert.find(query).sort({ createdAt: -1 });
 
-    console.log("Alerts found:", alerts.length);
+    console.log("GET /api/alerts Alerts found:", alerts.length, alerts);
 
     return NextResponse.json({ alerts }, { status: 200 });
   } catch (error: any) {
@@ -58,6 +49,8 @@ export async function POST(req: NextRequest) {
       createdAt: new Date(),
     });
 
+    console.log("POST /api/alerts New alert created:", newAlert);
+
     return NextResponse.json(
       { message: "Alert sent successfully.", alert: newAlert },
       { status: 201 }
@@ -68,5 +61,27 @@ export async function POST(req: NextRequest) {
       { error: "Failed to send alert", details: error.message },
       { status: 500 }
     );
+  }
+}
+
+// Example helper for server-side use (not for API route file)
+export async function getUserAlertsFromDb(userId: string) {
+  await connectMongoDB();
+  const query = userId ? { userId } : {};
+  return AdminAlert.find(query).sort({ createdAt: -1 });
+}
+
+export async function fetchUserAlerts(userId: string) {
+  try {
+    const res = await fetch(`/api/alerts?userId=${userId}`);
+    if (!res.ok) {
+      throw new Error(`Error fetching alerts: ${res.statusText}`);
+    }
+    const data = await res.json();
+    console.log("Frontend fetched data:", data);
+    return data.alerts || [];
+  } catch (error) {
+    console.error("fetchUserAlerts error:", error);
+    return null;
   }
 }

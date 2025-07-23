@@ -8,7 +8,7 @@ export default function AdminPortal() {
   const cards = [
     { title: "Schemes Update", color: "bg-blue-100" },
     { title: "Exam Update", color: "bg-green-100" },
-    { title: "Collected Documents", color: "bg-yellow-100" },
+    { title: "Collected Documents", color: "bg-yellow-100" , path: "/admin/digilocker" }, // ✅ Path added},
     { title: "Alert Update", color: "bg-red-100", path: "/admin/alert" }, // ✅ Path added
     { title: "Documents Checking", color: "bg-purple-100" },
     {
