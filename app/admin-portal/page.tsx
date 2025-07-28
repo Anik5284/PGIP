@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import path from "path";
 
 export default function AdminPortal() {
   const router = useRouter();
 
   const cards = [
     { title: "Schemes Update", color: "bg-blue-100" },
-    { title: "Exam Update", color: "bg-green-100" },
+    { title: "Exam Update", color: "bg-green-100", path: "/admin/exam" }, // ✅ Path added
     { title: "Collected Documents", color: "bg-yellow-100" , path: "/admin/digilocker" }, // ✅ Path added},
     { title: "Alert Update", color: "bg-red-100", path: "/admin/alert" }, // ✅ Path added
     { title: "Documents Checking", color: "bg-purple-100" , path: "/admin/documentchecking" }, // ✅ Path added
