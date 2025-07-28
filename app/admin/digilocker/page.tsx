@@ -109,8 +109,8 @@ export default function AdminDocumentViewer() {
                       <img
                         src={doc.fileUrl}
                         alt={doc.documentType}
-                        className="w-full h-40 object-contain border rounded mb-2"
-                      />
+                        className="w-full h-40 object-contain border roundedmb-2"
+                      /> 
                     ) : (
                       <p className="text-sm text-blue-600 truncate">{doc.fileUrl}</p>
                     )}
@@ -119,6 +119,7 @@ export default function AdminDocumentViewer() {
                       href={doc.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      download={doc.fileUrl.split("/").pop() || "document"}
                       className="block mt-3 text-center bg-indigo-600 text-white py-2 rounded hover:bg-indigo-500 text-sm font-medium"
                     >
                       View / Download

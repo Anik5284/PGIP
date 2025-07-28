@@ -14,7 +14,7 @@ export default function UserAlertsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const userId = "user123"; // TODO: Replace with dynamic user ID from session
+  const userId = "123"; // ✅ Must match MongoDB document
 
   useEffect(() => {
     const fetchAlerts = async () => {
