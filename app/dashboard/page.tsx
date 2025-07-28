@@ -102,7 +102,7 @@ export default function GovernmentPortal() {
                 </Card>
               </Link>
 
-              <Link href="/exams" className="block h-full">
+              <Link href="/exam" className="block h-full">
                 <Card className="hover:shadow-lg group transition cursor-pointer h-full">
                   <CardContent className="p-6 text-center h-full flex flex-col justify-center">
                     <div className="bg-green-100 text-green-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-green-600 group-hover:text-white">
