@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
-interface Message {
+interface ExamMessage {
   _id: string;
   message: string;
-  sentAt: string;
+  createdAt: string;
 }
 
-export default function UserMessagesPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
+export default function UserExamPage() {
+  const [messages, setMessages] = useState<ExamMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,16 +17,11 @@ export default function UserMessagesPage() {
     const fetchMessages = async () => {
       try {
         const res = await fetch('/api/admin/exam');
-
-        if (!res.ok) {
-          throw new Error('Failed to fetch messages');
-        }
-
+        if (!res.ok) throw new Error('Failed to fetch messages');
         const data = await res.json();
-        setMessages(data.messages);
+        setMessages(data);
       } catch (err: any) {
-        console.error('Error:', err);
-        setError(err.message || 'Failed to load messages.');
+        setError(err.message || 'Something went wrong');
       } finally {
         setLoading(false);
       }
@@ -37,28 +32,25 @@ export default function UserMessagesPage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Exam Updates </h1>
+      <h1 className="text-2xl font-bold mb-4">📢 Exam Announcements</h1>
 
-      {loading && <p>Loading messages...</p>}
-
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-600">❌ {error}</p>}
 
       {!loading && !error && messages.length === 0 && (
-        <p>No messages available.</p>
+        <p className="text-gray-500">No messages yet.</p>
       )}
 
-      {!loading && messages.length > 0 && (
-        <ul className="space-y-4">
-          {messages.map((msg) => (
-            <li key={msg._id} className="border p-4 rounded shadow-sm">
-              <p>{msg.message}</p>
-              <span className="text-sm text-gray-500">
-                {new Date(msg.sentAt).toLocaleString()}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="space-y-4">
+        {messages.map((msg) => (
+          <li key={msg._id} className="border p-4 rounded shadow">
+            <p>{msg.message}</p>
+            <p className="text-sm text-gray-400 mt-2">
+              {new Date(msg.createdAt).toLocaleString()}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

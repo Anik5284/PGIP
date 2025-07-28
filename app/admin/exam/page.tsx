@@ -1,97 +1,65 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-interface Message {
+type Message = {
   _id: string;
   message: string;
-  sentAt: string;
-}
+};
 
-export default function AdminPage() {
+export default function AdminExamPage() {
+  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [newMessage, setNewMessage] = useState('');
-  const [editMessageId, setEditMessageId] = useState<string | null>(null);
-  const [editMessageText, setEditMessageText] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
-  // Load messages from API
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch('/api/admin/exam');
-      const data = await res.json();
-      setMessages(data.messages);
-    } catch (err) {
-      console.error(err);
-      setError('Failed to load messages');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Fetch messages on load
   useEffect(() => {
     fetchMessages();
   }, []);
 
-  // Submit new message
-  const handleAddMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
+  const fetchMessages = async () => {
+    const res = await fetch('/api/admin/exam');
+    const data = await res.json();
+    setMessages(data);
+  };
 
-    if (!newMessage.trim()) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSuccess(false);
+    setError(null);
 
     try {
+      const method = editingId ? 'PUT' : 'POST';
       const res = await fetch('/api/admin/exam', {
-        method: 'POST',
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: newMessage }),
+        body: JSON.stringify({ message, id: editingId }),
       });
 
-      if (!res.ok) throw new Error('Failed to send message');
+      if (!res.ok) throw new Error('Failed to save');
 
-      setNewMessage('');
-      setSuccess('Message sent successfully');
+      setMessage('');
+      setEditingId(null);
+      setSuccess(true);
       fetchMessages();
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Something went wrong');
     }
   };
 
-  // Delete message
+  const handleEdit = (msg: Message) => {
+    setMessage(msg.message);
+    setEditingId(msg._id);
+    setSuccess(false);
+    setError(null);
+  };
+
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/admin/exam?id=${id}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) throw new Error('Failed to delete message');
-      fetchMessages();
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  // Start editing
-  const startEdit = (id: string, message: string) => {
-    setEditMessageId(id);
-    setEditMessageText(message);
-  };
-
-  // Save edited message
-  const saveEdit = async () => {
-    try {
-      const res = await fetch('/api/admin/exam', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: editMessageId, message: editMessageText }),
-      });
-
-      if (!res.ok) throw new Error('Failed to update message');
-      setEditMessageId(null);
-      setEditMessageText('');
+      const res = await fetch(`/api/admin/exam?id=${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
       fetchMessages();
     } catch (err: any) {
       setError(err.message);
@@ -99,81 +67,53 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Admin - Manage Exam Messages</h1>
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Admin - Exam Messages</h1>
 
-      <form onSubmit={handleAddMessage} className="mb-6">
+      <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <textarea
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          className="w-full p-2 border rounded"
-          rows={3}
-          placeholder="Enter a message to send..."
+          className="w-full border rounded p-2"
+          rows={4}
+          placeholder="Enter your exam message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
+
         <button
           type="submit"
-          className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Send Message
+          {editingId ? 'Update' : 'Send'}
         </button>
-        {success && <p className="text-green-600 mt-2">{success}</p>}
-        {error && <p className="text-red-600 mt-2">{error}</p>}
+
+        {success && <p className="text-green-600">✅ Success!</p>}
+        {error && <p className="text-red-600">❌ {error}</p>}
       </form>
 
-      {loading ? (
-        <p>Loading messages...</p>
-      ) : (
-        <ul className="space-y-4">
-          {messages.map((msg) => (
-            <li key={msg._id} className="border p-4 rounded shadow-sm flex flex-col gap-2">
-              {editMessageId === msg._id ? (
-                <>
-                  <textarea
-                    className="w-full border p-2 rounded"
-                    value={editMessageText}
-                    onChange={(e) => setEditMessageText(e.target.value)}
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={saveEdit}
-                      className="bg-green-600 text-white px-3 py-1 rounded"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditMessageId(null)}
-                      className="bg-gray-400 text-white px-3 py-1 rounded"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p>{msg.message}</p>
-                  <span className="text-sm text-gray-500">
-                    {new Date(msg.sentAt).toLocaleString()}
-                  </span>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => startEdit(msg._id, msg.message)}
-                      className="text-blue-600 underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(msg._id)}
-                      className="text-red-600 underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="space-y-4">
+        {messages.map((msg) => (
+          <div
+            key={msg._id}
+            className="border p-4 rounded flex justify-between items-start"
+          >
+            <p className="flex-1 whitespace-pre-wrap">{msg.message}</p>
+            <div className="space-x-2">
+              <button
+                onClick={() => handleEdit(msg)}
+                className="text-blue-600 hover:underline"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(msg._id)}
+                className="text-red-600 hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
