@@ -146,7 +146,7 @@ export default function GovernmentPortal() {
                 </Card>
               </Link>
 
-              <Link href="/checklist" className="block h-full">
+              <Link href="/documentchecklist" className="block h-full">
                 <Card className="hover:shadow-lg group transition cursor-pointer h-full">
                   <CardContent className="p-6 text-center h-full flex flex-col justify-center">
                     <div className="bg-yellow-100 text-yellow-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-yellow-600 group-hover:text-white">

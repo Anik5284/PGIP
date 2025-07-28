@@ -1,22 +1,17 @@
-import mongoose, { Schema, Document, models, model } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface CheckDocumentType extends Document {
+export interface ICheckDocument extends Document {
   message: string;
   sentAt: Date;
 }
 
-const CheckDocumentSchema = new Schema<CheckDocumentType>({
-  message: {
-    type: String,
-    required: true,
-  },
-  sentAt: {
-    type: Date,
-    default: Date.now,
-  },
+const CheckDocumentSchema = new Schema<ICheckDocument>({
+  message: { type: String, required: true },
+  sentAt: { type: Date, default: Date.now },
 });
 
 const CheckDocument =
-  models.CheckDocument || model<CheckDocumentType>('CheckDocument', CheckDocumentSchema);
+  mongoose.models.CheckDocument ||
+  mongoose.model<ICheckDocument>('CheckDocument', CheckDocumentSchema);
 
 export default CheckDocument;
