@@ -20,9 +20,14 @@ export default function AdminSchemesPage() {
   }, []);
 
   const fetchSchemes = async () => {
-    const res = await fetch('/api/admin/schemes');
-    const data = await res.json();
-    setSchemes(data);
+    try {
+      const res = await fetch('/api/admin/scheme');
+      if (!res.ok) throw new Error('Failed to fetch schemes');
+      const data = await res.json();
+      setSchemes(data);
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,7 +37,7 @@ export default function AdminSchemesPage() {
 
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const res = await fetch('/api/admin/schemes', {
+      const res = await fetch('/api/admin/scheme', {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, id: editingId }),
@@ -58,7 +63,7 @@ export default function AdminSchemesPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/admin/schemes?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/scheme?id=${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete');
       fetchSchemes();
     } catch (err: any) {

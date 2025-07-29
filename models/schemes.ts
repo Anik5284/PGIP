@@ -1,8 +1,16 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, Document, models, model } from 'mongoose';
 
-const SchemeSchema = new Schema({
-  message: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
+export interface IScheme extends Document {
+  message: string;
+  sentAt: Date;
+}
 
-export const Scheme = models.Scheme || model('Scheme', SchemeSchema);
+const schemeSchema = new Schema<IScheme>(
+  {
+    message: { type: String, required: true },
+    sentAt: { type: Date, default: Date.now },
+  },
+  { timestamps: true } // ensures createdAt is available
+);
+
+export const Scheme = models.Scheme || model<IScheme>('Scheme', schemeSchema);

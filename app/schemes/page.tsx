@@ -14,7 +14,7 @@ export default function UserSchemesPage() {
 
   useEffect(() => {
     const fetchSchemes = async () => {
-      const res = await fetch('/api/user/schemes');
+      const res = await fetch('/api/schemes');
       const data = await res.json();
       setSchemes(data);
       setLoading(false);
