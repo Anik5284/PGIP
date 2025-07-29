@@ -39,7 +39,7 @@ export default function AdminDocumentViewer() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch("/api/digitallocker/get");
+        const res = await fetch("/api/admin/digitallocker");
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Failed to fetch documents");
 
