@@ -54,11 +54,10 @@ export default function AdminFeedbackPage() {
   };
 
   return (
-    // Colorful gradient background for a vibrant feel
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-blue-100 font-sans">
+    // The gradient classes have been removed from this container div
+    <div className="min-h-screen font-sans">
       <main className="max-w-5xl mx-auto p-6 sm:p-10">
         <header className="mb-12 text-center">
-          {/* Header text uses the new accent color */}
           <h1 className="text-4xl sm:text-5xl font-bold text-indigo-700 tracking-tight">
             User Feedback
           </h1>
@@ -83,7 +82,6 @@ export default function AdminFeedbackPage() {
             {feedbacks.map((fb) => (
               <li
                 key={fb._id}
-                // Cards are semi-transparent for a modern "glassmorphism" effect
                 className="bg-white/70 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out overflow-hidden ring-1 ring-black ring-opacity-5"
               >
                 <div className="p-6">
@@ -92,7 +90,6 @@ export default function AdminFeedbackPage() {
                   </p>
                 </div>
 
-                {/* Footer uses the accent color for icons and details */}
                 <div className="bg-white/50 px-6 py-4 border-t border-indigo-200/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   {fb.userId && (
                     <div className="flex items-center gap-2 text-sm text-indigo-600">
