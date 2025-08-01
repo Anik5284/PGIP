@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-//=========== TYPE DEFINITION ===========//
 interface DocumentEntry {
   _id: string;
   userId: string;
@@ -11,11 +10,7 @@ interface DocumentEntry {
   uploadedAt: string;
 }
 
-//=========== REUSABLE COMPONENTS ===========//
-
-/**
- * A reusable, accessible Icon component
- */
+// A reusable Icon component for a clean, consistent icon system
 const Icon = ({ path, className = "" }: { path: string; className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -28,23 +23,7 @@ const Icon = ({ path, className = "" }: { path: string; className?: string }) =>
   </svg>
 );
 
-/**
- * A skeleton loader component for a better loading experience
- */
-const SkeletonCard = () => (
-  <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 animate-pulse">
-    <div className="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
-    <div className="h-3 bg-slate-200 rounded w-1/2 mb-3"></div>
-    <div className="w-full h-40 bg-slate-200 rounded mb-3"></div>
-    <div className="h-10 bg-slate-200 rounded"></div>
-  </div>
-);
-
-//=========== CONSTANTS ===========//
-
-/**
- * Predefined document types and their display labels
- */
+// Predefined document types and their display labels
 const documentOrder: Record<string, string> = {
   photo: "Passport Size Photo",
   signature: "Signature",
@@ -63,8 +42,15 @@ const documentOrder: Record<string, string> = {
   disabilityCertificate: "Disability Certificate",
 };
 
-
-//=========== MAIN PAGE COMPONENT ===========//
+// A skeleton loader component for a better loading experience
+const SkeletonCard = () => (
+  <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 animate-pulse">
+    <div className="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
+    <div className="h-3 bg-slate-200 rounded w-1/2 mb-3"></div>
+    <div className="w-full h-40 bg-slate-200 rounded mb-3"></div>
+    <div className="h-10 bg-slate-200 rounded"></div>
+  </div>
+);
 
 export default function AdminDocumentViewer() {
   const [documents, setDocuments] = useState<DocumentEntry[]>([]);
@@ -163,6 +149,7 @@ export default function AdminDocumentViewer() {
                       href={doc.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      download={doc.fileUrl.split("/").pop() || "document"}
                       className="w-full flex items-center justify-center gap-2 text-sm font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 py-2 px-3 rounded-md transition-colors"
                     >
                       <Icon path="M4 12a1 1 0 011-1h6a1 1 0 110 2H5a1 1 0 01-1-1zm5-6a1 1 0 00-1 1v6a1 1 0 102 0V7a1 1 0 00-1-1z M15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
