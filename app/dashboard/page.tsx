@@ -199,7 +199,7 @@ export default function GovernmentPortal() {
             </div>
 
             <nav className="hidden md:flex items-center space-x-6">
-              {["welcome", "schemes", "exams", "notifications"].map((tab) => (
+              {["welcome", "Feddback", "notifications"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setSelectedTab(tab)}
@@ -233,7 +233,7 @@ export default function GovernmentPortal() {
 
           {isMobileMenuOpen && (
             <nav className="md:hidden border-t border-gray-200 py-2">
-              {["welcome", "schemes", "exams", "notifications"].map((tab) => (
+              {["welcome", "Feedback", "notifications"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => {
