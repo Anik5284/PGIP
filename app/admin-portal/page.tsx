@@ -1,20 +1,45 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import path from "path";
 
 export default function AdminPortal() {
   const router = useRouter();
 
   const cards = [
-    { title: "Schemes Update", color: "bg-blue-100" , path: "/admin/schemes"},
-    { title: "Exam Update", color: "bg-green-100", path: "/admin/exam" }, // ✅ Path added
-    { title: "Collected Documents", color: "bg-yellow-100" , path: "/admin/digilocker" }, // ✅ Path added},
-    { title: "Alert Update", color: "bg-red-100", path: "/admin/alert" }, // ✅ Path added
-    { title: "Documents Checking", color: "bg-purple-100" , path: "/admin/documentchecking" }, // ✅ Path added
+    {
+      title: "Schemes Update",
+      color: "bg-blue-100",
+      hoverColor: "hover:bg-blue-300",
+      path: "/admin/schemes",
+    },
+    {
+      title: "Exam Update",
+      color: "bg-green-100",
+      hoverColor: "hover:bg-green-300",
+      path: "/admin/exam",
+    },
+    {
+      title: "Collected Documents",
+      color: "bg-yellow-100",
+      hoverColor: "hover:bg-yellow-300",
+      path: "/admin/digilocker",
+    },
+    {
+      title: "Alert Update",
+      color: "bg-red-100",
+      hoverColor: "hover:bg-red-300",
+      path: "/admin/alert",
+    },
+    {
+      title: "Documents Checking",
+      color: "bg-purple-100",
+      hoverColor: "hover:bg-purple-300",
+      path: "/admin/documentchecking",
+    },
     {
       title: "Feedback Received",
       color: "bg-pink-100",
+      hoverColor: "hover:bg-pink-300",
       path: "/admin/feedback",
     },
   ];
@@ -46,8 +71,8 @@ export default function AdminPortal() {
           <div
             key={idx}
             onClick={() => handleCardClick(card.path)}
-            className={`rounded-2xl shadow-lg p-6 text-center text-gray-700 font-medium hover:scale-105 transition-transform duration-300 ${card.color} ${
-              card.path ? "cursor-pointer hover:shadow-xl" : ""
+            className={`rounded-2xl shadow-lg p-6 text-center text-gray-700 font-medium transform transition-all duration-300 ${card.color} ${card.hoverColor} ${
+              card.path ? "cursor-pointer hover:shadow-xl scale-100 hover:scale-105" : ""
             }`}
           >
             {card.title}
