@@ -9,37 +9,37 @@ export default function AdminPortal() {
     {
       title: "Schemes Update",
       color: "bg-blue-100",
-      hoverColor: "hover:bg-blue-300",
+      hoverColor: "hover:bg-blue-500 hover:text-white",
       path: "/admin/schemes",
     },
     {
       title: "Exam Update",
       color: "bg-green-100",
-      hoverColor: "hover:bg-green-300",
+      hoverColor: "hover:bg-green-500 hover:text-white",
       path: "/admin/exam",
     },
     {
       title: "Collected Documents",
       color: "bg-yellow-100",
-      hoverColor: "hover:bg-yellow-300",
+      hoverColor: "hover:bg-yellow-500 hover:text-white",
       path: "/admin/digilocker",
     },
     {
       title: "Alert Update",
       color: "bg-red-100",
-      hoverColor: "hover:bg-red-300",
+      hoverColor: "hover:bg-red-500 hover:text-white",
       path: "/admin/alert",
     },
     {
       title: "Documents Checking",
       color: "bg-purple-100",
-      hoverColor: "hover:bg-purple-300",
+      hoverColor: "hover:bg-purple-500 hover:text-white",
       path: "/admin/documentchecking",
     },
     {
       title: "Feedback Received",
       color: "bg-pink-100",
-      hoverColor: "hover:bg-pink-300",
+      hoverColor: "hover:bg-pink-500 hover:text-white",
       path: "/admin/feedback",
     },
   ];
@@ -71,8 +71,8 @@ export default function AdminPortal() {
           <div
             key={idx}
             onClick={() => handleCardClick(card.path)}
-            className={`rounded-2xl shadow-lg p-6 text-center text-gray-700 font-medium transform transition-all duration-300 ${card.color} ${card.hoverColor} ${
-              card.path ? "cursor-pointer hover:shadow-xl scale-100 hover:scale-105" : ""
+            className={`rounded-2xl shadow-lg p-6 text-center text-gray-700 font-semibold transform transition-all duration-300 ${card.color} ${card.hoverColor} ${
+              card.path ? "cursor-pointer hover:shadow-2xl scale-100 hover:scale-105" : ""
             }`}
           >
             {card.title}
