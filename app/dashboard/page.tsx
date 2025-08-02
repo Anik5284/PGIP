@@ -33,8 +33,7 @@ export default function GovernmentPortal() {
               Government Schemes
             </h2>
             <p className="text-gray-600 mb-4">
-              Browse and apply for available schemes designed to support
-              citizens across various sectors.
+              Browse and apply for available schemes designed to support citizens across various sectors.
             </p>
           </section>
         );
@@ -60,6 +59,17 @@ export default function GovernmentPortal() {
             </p>
           </section>
         );
+      case "taxupdate":
+        return (
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Tax Update
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Stay current with the latest tax-related updates and changes.
+            </p>
+          </section>
+        );
       default:
         return (
           <>
@@ -80,8 +90,7 @@ export default function GovernmentPortal() {
                     Important Announcement
                   </p>
                   <p className="text-blue-700 text-sm">
-                    New digital services are now available. Check the latest
-                    updates and apply for eligible schemes.
+                    New digital services are now available. Check the latest updates and apply for eligible schemes.
                   </p>
                 </div>
               </div>
@@ -160,15 +169,15 @@ export default function GovernmentPortal() {
                 </Card>
               </Link>
 
-              <Link href="/feedback" className="block h-full">
+              <Link href="/taxupdate" className="block h-full">
                 <Card className="hover:shadow-lg group transition cursor-pointer h-full">
                   <CardContent className="p-6 text-center h-full flex flex-col justify-center">
                     <div className="bg-teal-100 text-teal-600 rounded-full p-4 w-16 h-16 mx-auto mb-4 group-hover:bg-teal-600 group-hover:text-white">
                       <MessageSquare className="w-8 h-8" />
                     </div>
-                    <h3 className="text-lg font-semibold">Feedback</h3>
+                    <h3 className="text-lg font-semibold">Tax Update</h3>
                     <p className="text-gray-600 text-sm">
-                      Share your experience with us
+                      Stay current with tax regulations
                     </p>
                   </CardContent>
                 </Card>
@@ -178,6 +187,12 @@ export default function GovernmentPortal() {
         );
     }
   };
+
+  const navItems = [
+    { name: "Welcome", key: "welcome" },
+    { name: "Feedback", href: "/feedback" },
+    { name: "Notifications", key: "notifications" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -199,17 +214,23 @@ export default function GovernmentPortal() {
             </div>
 
             <nav className="hidden md:flex items-center space-x-6">
-              {["welcome", "Feddback", "notifications"].map((tab) => (
+              {navItems.map(({ name, key, href }) => (
                 <button
-                  key={tab}
-                  onClick={() => setSelectedTab(tab)}
+                  key={key || href}
+                  onClick={() => {
+                    if (href) {
+                      router.push(href);
+                    } else {
+                      setSelectedTab(key!);
+                    }
+                  }}
                   className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                    selectedTab === tab
+                    selectedTab === key
                       ? "bg-blue-100 text-blue-700"
                       : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                   }`}
                 >
-                  {tab[0].toUpperCase() + tab.slice(1)}
+                  {name}
                 </button>
               ))}
               <Button
@@ -233,20 +254,24 @@ export default function GovernmentPortal() {
 
           {isMobileMenuOpen && (
             <nav className="md:hidden border-t border-gray-200 py-2">
-              {["welcome", "Feedback", "notifications"].map((tab) => (
+              {navItems.map(({ name, key, href }) => (
                 <button
-                  key={tab}
+                  key={key || href}
                   onClick={() => {
-                    setSelectedTab(tab);
+                    if (href) {
+                      router.push(href);
+                    } else {
+                      setSelectedTab(key!);
+                    }
                     setIsMobileMenuOpen(false);
                   }}
                   className={`block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                    selectedTab === tab
+                    selectedTab === key
                       ? "bg-blue-100 text-blue-700"
                       : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                   }`}
                 >
-                  {tab[0].toUpperCase() + tab.slice(1)}
+                  {name}
                 </button>
               ))}
               <Button
@@ -272,15 +297,9 @@ export default function GovernmentPortal() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-gray-600 flex justify-between items-center">
           <p>© 2025 Government Information Portal. All rights reserved.</p>
           <div className="flex space-x-4">
-            <a href="/privacy" className="hover:text-gray-900">
-              Privacy Policy
-            </a>
-            <a href="/terms" className="hover:text-gray-900">
-              Terms of Service
-            </a>
-            <a href="/help" className="hover:text-gray-900">
-              Help
-            </a>
+            <a href="/privacy" className="hover:text-gray-900">Privacy Policy</a>
+            <a href="/terms" className="hover:text-gray-900">Terms of Service</a>
+            <a href="/help" className="hover:text-gray-900">Help</a>
           </div>
         </div>
       </footer>
