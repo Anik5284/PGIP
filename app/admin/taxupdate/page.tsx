@@ -10,7 +10,7 @@ export default function AdminTaxUpdatePage() {
     e.preventDefault();
     setStatus('Submitting...');
 
-    const response = await fetch('/api/taxupdate', {
+    const response = await fetch('/api/admin/taxupdate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message }),
