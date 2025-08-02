@@ -24,6 +24,12 @@ export default function GovernmentPortal() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
+  const navItems = [
+    { name: "Welcome", key: "welcome" },
+    { name: "Feedback", href: "/feedback" },
+    { name: "Notifications", href: "/notification" },
+  ];
+
   const renderContent = () => {
     switch (selectedTab) {
       case "schemes":
@@ -33,7 +39,8 @@ export default function GovernmentPortal() {
               Government Schemes
             </h2>
             <p className="text-gray-600 mb-4">
-              Browse and apply for available schemes designed to support citizens across various sectors.
+              Browse and apply for available schemes designed to support
+              citizens across various sectors.
             </p>
           </section>
         );
@@ -45,17 +52,6 @@ export default function GovernmentPortal() {
             </h2>
             <p className="text-gray-600 mb-4">
               Register and get updates on government competitive exams.
-            </p>
-          </section>
-        );
-      case "notifications":
-        return (
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Notifications
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Stay informed with the latest official updates and alerts.
             </p>
           </section>
         );
@@ -90,7 +86,8 @@ export default function GovernmentPortal() {
                     Important Announcement
                   </p>
                   <p className="text-blue-700 text-sm">
-                    New digital services are now available. Check the latest updates and apply for eligible schemes.
+                    New digital services are now available. Check the latest
+                    updates and apply for eligible schemes.
                   </p>
                 </div>
               </div>
@@ -188,12 +185,6 @@ export default function GovernmentPortal() {
     }
   };
 
-  const navItems = [
-    { name: "Welcome", key: "welcome" },
-    { name: "Feedback", href: "/feedback" },
-    { name: "Notifications", key: "notifications" },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 shadow-sm">
@@ -216,7 +207,7 @@ export default function GovernmentPortal() {
             <nav className="hidden md:flex items-center space-x-6">
               {navItems.map(({ name, key, href }) => (
                 <button
-                  key={key || href}
+                  key={name}
                   onClick={() => {
                     if (href) {
                       router.push(href);
@@ -256,7 +247,7 @@ export default function GovernmentPortal() {
             <nav className="md:hidden border-t border-gray-200 py-2">
               {navItems.map(({ name, key, href }) => (
                 <button
-                  key={key || href}
+                  key={name}
                   onClick={() => {
                     if (href) {
                       router.push(href);
@@ -297,9 +288,15 @@ export default function GovernmentPortal() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-gray-600 flex justify-between items-center">
           <p>© 2025 Government Information Portal. All rights reserved.</p>
           <div className="flex space-x-4">
-            <a href="/privacy" className="hover:text-gray-900">Privacy Policy</a>
-            <a href="/terms" className="hover:text-gray-900">Terms of Service</a>
-            <a href="/help" className="hover:text-gray-900">Help</a>
+            <a href="/privacy" className="hover:text-gray-900">
+              Privacy Policy
+            </a>
+            <a href="/terms" className="hover:text-gray-900">
+              Terms of Service
+            </a>
+            <a href="/help" className="hover:text-gray-900">
+              Help
+            </a>
           </div>
         </div>
       </footer>
