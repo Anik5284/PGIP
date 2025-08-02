@@ -46,7 +46,7 @@ export default function AdminPortal() {
       title: "Tax Update",
       color: "bg-teal-100",
       hoverColor: "hover:bg-teal-500 hover:text-white",
-      path: "/admin/tax",
+      path: "/admin/taxupdate",
     },
     {
       title: "Notification",
