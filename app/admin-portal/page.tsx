@@ -42,6 +42,18 @@ export default function AdminPortal() {
       hoverColor: "hover:bg-pink-500 hover:text-white",
       path: "/admin/feedback",
     },
+    {
+      title: "Tax Update",
+      color: "bg-teal-100",
+      hoverColor: "hover:bg-teal-500 hover:text-white",
+      path: "/admin/tax",
+    },
+    {
+      title: "Notification",
+      color: "bg-orange-100",
+      hoverColor: "hover:bg-orange-500 hover:text-white",
+      path: "/admin/notification",
+    },
   ];
 
   const handleLogout = () => {
